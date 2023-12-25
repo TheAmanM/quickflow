@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import "./Sidebar.css";
 
+const nodes = ["startNode", "endNode", "processNode"];
+
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const onDragStart = (event, nodeType) => {
+    event.dataTransfer.setData("application/reactflow", nodeType);
+    event.dataTransfer.effectAllowed = "move";
+  };
 
   return (
     <div className={isCollapsed ? "sidebar collapsed" : "sidebar"}>
@@ -15,6 +22,19 @@ const Sidebar = () => {
       >
         {isCollapsed ? ">" : "<"}
       </button>
+      <div className="sidebar__nodes">
+        {nodes.map((nodeType) => {
+          return (
+            <div
+              className={`sidebar__custom-node ${nodeType}`}
+              onDragStart={(event) => onDragStart(event, nodeType)}
+              draggable
+            >
+              {nodeType}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
