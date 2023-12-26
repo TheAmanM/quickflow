@@ -1,8 +1,9 @@
 import { Handle, Position, useReactFlow, useStoreApi } from "reactflow";
-
 import React, { useLayoutEffect, useRef } from "react";
 
-const ProcessNode = ({ id }) => {
+import "./DecisionNode.css";
+
+const DecisionNode = ({ id }) => {
   const textFieldRef = useRef(null);
 
   const { setNodes } = useReactFlow();
@@ -30,28 +31,39 @@ const ProcessNode = ({ id }) => {
     textFieldRef.current.style.width = newWidth;
   };
 
-  useLayoutEffect(adjustWidth, []);
+  //   useLayoutEffect(adjustWidth, []);
 
   const onChange = () => {
-    adjustWidth();
+    // adjustWidth();
     updateNode();
   };
 
   return (
     <>
-      <Handle type="target" position={Position.Top} />
-      <div>
+      {/* <div
+        style={{
+          width: 125,
+          aspectRatio: 1,
+          // textAlign: "center",
+          transform: "rotateX(0deg) rotateZ(0deg)",
+          backgroundColor: "#000",
+        }}
+      > */}
+      <div className="node__decision nodrag" style={{ lineHeight: "150px" }}>
         <input
           id="text"
           name="text"
           onChange={onChange}
           ref={textFieldRef}
-          style={{ width: 125, height: 40 }}
+          style={{ width: 150, height: 40 }}
         />
       </div>
-      <Handle type="source" position={Position.Bottom} />
+      {/* </div> */}
+      <Handle type="target" position={Position.Top} />
+      <Handle type="source" position={Position.Bottom} id="true" />
+      <Handle type="source" position={Position.Right} id="false" />
     </>
   );
 };
 
-export default ProcessNode;
+export default DecisionNode;

@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import "./Grid.css";
 import ReactFlow, {
   Background,
+  MarkerType,
   ReactFlowProvider,
   addEdge,
   applyEdgeChanges,
@@ -12,11 +13,13 @@ import "reactflow/dist/style.css";
 import StartNode from "../nodes/StartNode";
 import EndNode from "../nodes/EndNode";
 import ProcessNode from "../nodes/ProcessNode";
+import DecisionNode from "../nodes/DecisionNode";
 
 const nodeTypes = {
   startNode: StartNode,
   endNode: EndNode,
   processNode: ProcessNode,
+  decisionNode: DecisionNode,
 };
 
 const initialNodes = [
@@ -25,7 +28,17 @@ const initialNodes = [
   { id: "3", position: { x: 200, y: 100 }, type: "startNode" },
 ];
 
-const initialEdges = [{ id: "1", source: "1", target: "2", arrow: "filled" }];
+const initialEdges = [
+  {
+    id: "1",
+    source: "1",
+    target: "2",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      strokeWidth: 4,
+    },
+  },
+];
 
 const Grid = () => {
   const [nodes, setNodes] = useState(initialNodes);
@@ -57,7 +70,12 @@ const Grid = () => {
   );
 
   const onConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
+    (connection) =>
+      setEdges((eds) => {
+        connection.type = "smoothstep";
+        connection.markerEnd = { type: MarkerType.ArrowClosed, strokeWidth: 4 };
+        return addEdge(connection, eds);
+      }),
     [setEdges]
   );
 
@@ -92,7 +110,7 @@ const Grid = () => {
         width: 65,
         // data: { label: `${type} node` },
       };
-      if (newNode.type === "processNode") {
+      if (newNode.type !== "startNode" && newNode.type !== "endNode") {
         newNode.data = "";
       }
 
