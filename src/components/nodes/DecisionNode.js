@@ -66,9 +66,21 @@ const DecisionNode = ({ id }) => {
         />
       </div>
       {/* </div> */}
-      <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} id="true" />
-      <Handle type="source" position={Position.Right} id="false" />
+      <Handle
+        type="target"
+        position={Position.Top}
+        id="handle__decision-target"
+      />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="handle__decision-true"
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="handle__decision-false"
+      />
     </>
   );
 };

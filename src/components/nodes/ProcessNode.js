@@ -39,7 +39,7 @@ const ProcessNode = ({ id }) => {
 
   return (
     <>
-      <Handle type="target" position={Position.Top} />
+      <Handle type="target" position={Position.Top} id="handle__target" />
       <div>
         <input
           id="text"
@@ -49,7 +49,7 @@ const ProcessNode = ({ id }) => {
           style={{ width: 125, height: 40 }}
         />
       </div>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle type="source" position={Position.Bottom} id="handle__source" />
     </>
   );
 };

@@ -14,7 +14,7 @@ const EndNode = () => {
       }}
     >
       EndNode
-      <Handle type="target" position={Position.Top} />
+      <Handle type="target" position={Position.Top} id="handle__end" />
     </div>
   );
 };

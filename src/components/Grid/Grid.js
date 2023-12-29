@@ -11,6 +11,7 @@ import ReactFlow, {
   addEdge,
   applyEdgeChanges,
   applyNodeChanges,
+  getConnectedEdges,
 } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -80,7 +81,6 @@ const Grid = () => {
           newNodes = nds;
         }
         newNodes.map((currentNode) => {
-          console.log(currentNode);
           if (currentNode.position && !currentNode.dragging) {
             currentNode.position = adjustPosition(currentNode.position);
           }
@@ -106,6 +106,19 @@ const Grid = () => {
       }),
     [setEdges]
   );
+
+  const isValidEdge = (connection) => {
+    const source = connection.source;
+    const sourceHandle = connection.sourceHandle;
+
+    for (const edge of edges) {
+      if (edge.source === source && edge.sourceHandle === sourceHandle) {
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -158,6 +171,7 @@ const Grid = () => {
           nodeTypes={nodeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          isValidConnection={isValidEdge}
           onConnect={onConnect}
           onInit={setReactFlowInstance}
           onDrop={onDrop}

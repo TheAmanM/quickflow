@@ -14,7 +14,7 @@ const StartNode = () => {
       }}
     >
       StartNode
-      <Handle type="source" position={Position.Bottom} />
+      <Handle type="source" position={Position.Bottom} id="handle__start" />
     </div>
   );
 };
