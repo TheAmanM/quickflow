@@ -5,6 +5,7 @@ import "./DecisionNode.css";
 
 const DecisionNode = ({ id }) => {
   const textFieldRef = useRef(null);
+  const divRef = useRef(null);
 
   const { setNodes } = useReactFlow();
   const store = useStoreApi();
@@ -28,13 +29,15 @@ const DecisionNode = ({ id }) => {
     console.log(textFieldRef.current.value.length);
     const currentLength = Math.max(textFieldRef.current.value.length + 2, 24);
     const newWidth = currentLength.toString() + "ch";
+
     textFieldRef.current.style.width = newWidth;
+    divRef.current.style.lineHeight = newWidth;
   };
 
-  //   useLayoutEffect(adjustWidth, []);
+  useLayoutEffect(adjustWidth, []);
 
   const onChange = () => {
-    // adjustWidth();
+    adjustWidth();
     updateNode();
   };
 
@@ -49,7 +52,11 @@ const DecisionNode = ({ id }) => {
           backgroundColor: "#000",
         }}
       > */}
-      <div className="node__decision nodrag" style={{ lineHeight: "150px" }}>
+      <div
+        className="node__decision"
+        ref={divRef}
+        style={{ lineHeight: "150px" }}
+      >
         <input
           id="text"
           name="text"
