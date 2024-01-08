@@ -7,6 +7,7 @@ import ReactFlow, {
   Controls,
   MarkerType,
   MiniMap,
+  Panel,
   ReactFlowProvider,
   addEdge,
   applyEdgeChanges,
@@ -213,6 +214,7 @@ const Grid = () => {
               </svg>
             </ControlButton>
           </Controls>
+          <Panel position="top-center">top-center</Panel>
         </ReactFlow>
       </ReactFlowProvider>
     </div>
