@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "quickflow-a7ab4"
+  },
+  "targets": {
+    "quickflow-a7ab4": {
+      "hosting": {
+        "quickflow": [
+          "quickflow"
+        ],
+        "quickflow-a7ab4": [
+          "quickflow-a7ab4"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

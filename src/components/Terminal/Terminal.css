@@ -1,0 +1,9 @@
+.terminal {
+    background-color: #fff;
+    height: 35vh;
+    width: 100vw;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
