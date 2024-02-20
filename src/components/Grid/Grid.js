@@ -28,7 +28,7 @@ const nodeTypes = {
   decisionNode: DecisionNode,
 };
 
-const initialNodes = [
+/* const initialNodes = [
   { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
   { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
   { id: "3", position: { x: 200, y: 100 }, type: "startNode" },
@@ -44,7 +44,114 @@ const initialEdges = [
       strokeWidth: 4,
     },
   },
+]; */
+
+/* const initialNodes = [
+  {
+    width: 125,
+    height: 40,
+    id: "4",
+    type: "startNode",
+    position: {
+      x: 250,
+      y: 70,
+    },
+    selected: false,
+    positionAbsolute: {
+      x: 250,
+      y: 70,
+    },
+    dragging: false,
+  },
+  {
+    width: 176,
+    height: 40,
+    id: "5",
+    type: "processNode",
+    position: {
+      x: 280,
+      y: 180,
+    },
+    data: "x <- 5 + 7",
+    selected: true,
+    positionAbsolute: {
+      x: 280,
+      y: 180,
+    },
+    dragging: false,
+  },
+  {
+    width: 125,
+    height: 40,
+    id: "6",
+    type: "endNode",
+    position: {
+      x: 240,
+      y: 290,
+    },
+    selected: false,
+    positionAbsolute: {
+      x: 240,
+      y: 290,
+    },
+    dragging: false,
+  },
 ];
+
+const initialEdges = [
+  {
+    width: 125,
+    height: 40,
+    id: "4",
+    type: "startNode",
+    position: {
+      x: 250,
+      y: 70,
+    },
+    selected: false,
+    positionAbsolute: {
+      x: 250,
+      y: 70,
+    },
+    dragging: false,
+  },
+  {
+    width: 176,
+    height: 40,
+    id: "5",
+    type: "processNode",
+    position: {
+      x: 280,
+      y: 180,
+    },
+    data: "x <- 5 + 7",
+    selected: true,
+    positionAbsolute: {
+      x: 280,
+      y: 180,
+    },
+    dragging: false,
+  },
+  {
+    width: 125,
+    height: 40,
+    id: "6",
+    type: "endNode",
+    position: {
+      x: 240,
+      y: 290,
+    },
+    selected: false,
+    positionAbsolute: {
+      x: 240,
+      y: 290,
+    },
+    dragging: false,
+  },
+]; */
+
+const initialNodes = [];
+const initialEdges = [];
 
 const adjustPosition = (coords) => {
   const snapConstant = 10;
@@ -176,7 +283,6 @@ const Grid = () => {
         onInit={setReactFlowInstance}
         onDrop={onDrop}
         onDragOver={onDragOver}
-        fitView
       >
         <Background
           id="1"

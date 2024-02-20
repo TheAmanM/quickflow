@@ -24,7 +24,7 @@ const ProcessNode = ({ id }) => {
 
   const adjustWidth = () => {
     // Update input size
-    console.log(textFieldRef.current.value.length);
+    // console.log(textFieldRef.current.value.length);
     const currentLength = Math.max(textFieldRef.current.value.length + 2, 24);
     const newWidth = currentLength.toString() + "ch";
     textFieldRef.current.style.width = newWidth;

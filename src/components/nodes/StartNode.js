@@ -26,7 +26,7 @@ const StartNode = ({ id }) => {
       >
         <MdStart
           onClick={() => {
-            if (!isRunning) compile(id);
+            compile(id);
           }}
         />
       </div>
