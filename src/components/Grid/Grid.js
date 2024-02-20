@@ -20,12 +20,14 @@ import StartNode from "../nodes/StartNode";
 import EndNode from "../nodes/EndNode";
 import ProcessNode from "../nodes/ProcessNode";
 import DecisionNode from "../nodes/DecisionNode";
+import IONode from "../nodes/IONode";
 
 const nodeTypes = {
   startNode: StartNode,
   endNode: EndNode,
   processNode: ProcessNode,
   decisionNode: DecisionNode,
+  ioNode: IONode,
 };
 
 /* const initialNodes = [

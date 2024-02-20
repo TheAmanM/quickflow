@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Sidebar.css";
 
-const nodes = ["startNode", "endNode", "processNode", "decisionNode"];
+const nodes = ["startNode", "endNode", "processNode", "decisionNode", "ioNode"];
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
