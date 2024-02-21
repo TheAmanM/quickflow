@@ -19,6 +19,7 @@ export const CompilerStateProvider = ({ children }) => {
 
   const [showInputField, setShowInputField] = useState(false);
   let inputValue = "";
+  let direction = null;
 
   const setInputValue = (newValue) => {
     inputValue = newValue;
@@ -168,12 +169,34 @@ export const CompilerStateProvider = ({ children }) => {
           terminalLog(`Error: Invalid node of type ${currentNode.type}`);
           runningFlow = false;
         }
+      } else if (currentNode.type == "decisionNode") {
+        const tree = generateAST(currentNode.data);
+        if (tree.type === "error") {
+          terminalLog(tree.message);
+          runningFlow = false;
+        } else if (tree.type == "conditionExpression") {
+          const result = evaluate(tree.data);
+          if (result.type === "error") {
+            terminalLog(result.message);
+            runningFlow = false;
+          } else if (result.type !== "boolean") {
+            terminalLog(
+              `Error: Can not cast type ${result.type} to type boolean`
+            );
+            runningFlow = false;
+          } else {
+            direction = result.data;
+          }
+        } else {
+          terminalLog(`Error: Invalid node of type ${currentNode.type}`);
+          runningFlow = false;
+        }
       } else {
         console.log(`Error: Unexpected node of type ${currentNode.type}`);
         runningFlow = false;
       }
 
-      currentNode = nextNode(currentNode);
+      currentNode = nextNode(currentNode, direction);
     }
 
     if (!foundEndNode) {
@@ -184,11 +207,24 @@ export const CompilerStateProvider = ({ children }) => {
     setMemory({});
   };
 
-  const nextNode = (node) => {
-    const outgoers = getOutgoers(node, nodes, edges);
+  const nextNode = (currrentNode, direction) => {
+    const outgoers = getOutgoers(currrentNode, nodes, edges);
 
     if (outgoers.length === 0) return null;
-    return outgoers[0];
+    if (currrentNode.type === "decisionNode") {
+      const newId = `handle__decision-${direction}`;
+      direction = null;
+      console.log(edges);
+      const newEdge =
+        edges.filter((edge) => {
+          return edge.sourceHandle === newId && edge.source === currrentNode.id;
+        })[0] ?? null;
+      return nodes.find(function (node) {
+        return node.id === newEdge.target;
+      });
+    } else {
+      return outgoers[0];
+    }
   };
 
   const terminalLog = (line) => {
