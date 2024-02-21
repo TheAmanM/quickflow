@@ -15,8 +15,21 @@ export const useCompiler = () => {
 export const CompilerStateProvider = ({ children }) => {
   const [terminalLines, setTerminalLines] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
-  // const [memory, setMemory] = useState({});
   let memory = {};
+
+  const [showInputField, setShowInputField] = useState(false);
+  let inputValue = "";
+
+  const setInputValue = (newValue) => {
+    inputValue = newValue;
+  };
+
+  const handleEnter = (data) => {
+    if (data !== "") {
+      setInputValue(data);
+      setShowInputField(false);
+    }
+  };
 
   const setMemory = (newMemory) => {
     memory = newMemory;
@@ -73,7 +86,7 @@ export const CompilerStateProvider = ({ children }) => {
 
     while (currentNode !== null && runningFlow) {
       if (currentNode.type === "startNode") {
-        terminalLog("Running flow...");
+        // terminalLog("Running flow...");
       } else if (currentNode.type === "endNode") {
         terminalLog("Flow terminated successfully. Exit code: 0");
         foundEndNode = true;
@@ -129,6 +142,29 @@ export const CompilerStateProvider = ({ children }) => {
           }
         } else {
           //TODO: Handle invalid type
+          terminalLog(`Error: Invalid node of type ${currentNode.type}`);
+          runningFlow = false;
+        }
+      } else if (currentNode.type === "ioNode") {
+        const tree = generateAST(currentNode.data);
+        if (tree.type === "error") {
+          terminalLog(tree.message);
+          runningFlow = false;
+        } else if (tree.type == "input") {
+          terminalLog(
+            `Note: Nodes of type "Input" are currently not supported.`
+          );
+        } else if (tree.type == "output") {
+          console.log("OUTPUT");
+          const result = evaluate(tree.data);
+          console.log(result);
+          if (result.type === "error") {
+            terminalLog(result.message);
+            runningFlow = false;
+          } else {
+            terminalLog(result.data.toString());
+          }
+        } else {
           terminalLog(`Error: Invalid node of type ${currentNode.type}`);
           runningFlow = false;
         }
@@ -430,11 +466,22 @@ export const CompilerStateProvider = ({ children }) => {
       }
 
       return { type: "string", data: left.data.concat(right.data) };
+    } else {
+      return { type: "error", message: "Error: Invalid syntax." };
     }
   };
 
   return (
-    <CompilerContext.Provider value={{ terminalLines, isRunning, compile }}>
+    <CompilerContext.Provider
+      value={{
+        terminalLines,
+        isRunning,
+        compile,
+        showInputField,
+        handleEnter,
+        setInputValue,
+      }}
+    >
       {children}
     </CompilerContext.Provider>
   );
