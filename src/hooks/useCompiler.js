@@ -99,7 +99,6 @@ export const CompilerStateProvider = ({ children }) => {
           runningFlow = false;
         } else if (tree.type === "assignmentExpression") {
           console.log(tree);
-          terminalLog("Parse successful!");
 
           const newExpression = evaluate(tree.assign);
           console.log(newExpression);
@@ -151,11 +150,11 @@ export const CompilerStateProvider = ({ children }) => {
         if (tree.type === "error") {
           terminalLog(tree.message);
           runningFlow = false;
-        } else if (tree.type == "input") {
+        } else if (tree.type === "input") {
           terminalLog(
             `Note: Nodes of type "Input" are currently not supported.`
           );
-        } else if (tree.type == "output") {
+        } else if (tree.type === "output") {
           console.log("OUTPUT");
           const result = evaluate(tree.data);
           console.log(result);
@@ -169,12 +168,12 @@ export const CompilerStateProvider = ({ children }) => {
           terminalLog(`Error: Invalid node of type ${currentNode.type}`);
           runningFlow = false;
         }
-      } else if (currentNode.type == "decisionNode") {
+      } else if (currentNode.type === "decisionNode") {
         const tree = generateAST(currentNode.data);
         if (tree.type === "error") {
           terminalLog(tree.message);
           runningFlow = false;
-        } else if (tree.type == "conditionExpression") {
+        } else if (tree.type === "conditionExpression") {
           const result = evaluate(tree.data);
           if (result.type === "error") {
             terminalLog(result.message);
@@ -308,12 +307,12 @@ export const CompilerStateProvider = ({ children }) => {
         newMemory[identifier] = {
           type: "arrayVariable",
           exactType: dataType,
-          value: newArray,
+          data: newArray,
         };
       } else {
         newMemory[identifier] = {
           type: dataType,
-          value: data,
+          data: data,
         };
       }
       setMemory(newMemory);
@@ -429,7 +428,7 @@ export const CompilerStateProvider = ({ children }) => {
       } else {
         return {
           type: memory[ast.identifier].type,
-          data: memory[ast.identifier].value,
+          data: memory[ast.identifier].data,
         };
       }
     } else if (ast.type === "arithmeticExpression") {
@@ -480,6 +479,56 @@ export const CompilerStateProvider = ({ children }) => {
             type: Number.isInteger(result) ? "integer" : "float",
           };
         }
+      }
+    } else if (ast.type === "conditionExpression") {
+      const data = evaluate(ast.data);
+      if (data.type === "error") {
+        return data;
+      } else if (data.type !== "boolean") {
+        return {
+          type: "error",
+          message: `Error: Can not cast type ${data.type} to type boolean.`,
+        };
+      }
+    } else if (ast.type === "comparativeExpression") {
+      const left = evaluate(ast.left);
+      if (left.type === "error") {
+        return left;
+      } else if (left.type !== "float" && left.type !== "integer") {
+        return {
+          type: "error",
+          message: `Error: Can not cast type ${left.type} to type integer or float.`,
+        };
+      }
+
+      const right = evaluate(ast.right);
+      if (right.type === "error") {
+        return right;
+      } else if (right.type !== "float" && right.type !== "integer") {
+        return {
+          type: "error",
+          message: `Error: Can not cast type ${right.type} to type integer or float.`,
+        };
+      }
+
+      if (ast.operator === ">") {
+        return { type: "boolean", data: left.data > right.data };
+      } else if (ast.operator === "<") {
+        console.log(left.data, right.data, left.data < right.data);
+        return { type: "boolean", data: left.data < right.data };
+      } else if (ast.operator === "<=") {
+        return { type: "boolean", data: left.data <= right.data };
+      } else if (ast.operator === ">=") {
+        return { type: "boolean", data: left.data >= right.data };
+      } else if (ast.operator === "=") {
+        return { type: "boolean", data: left.data === right.data };
+      } else if (ast.operator === "<>") {
+        return { type: "boolean", data: left.data !== right.data };
+      } else {
+        return {
+          type: "error",
+          message: `Error: Invalid operator ${ast.operator}`,
+        };
       }
     } else if (ast.type === "concatenativeExpression") {
       const left = evaluate(ast.left);
